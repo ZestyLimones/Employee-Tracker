@@ -1,7 +1,7 @@
 {
   "name": "Employee-Tracker",
   "version": "1.0.0",
-  "description": "",
+  "description": "command-line application that manage a company's employee database",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
