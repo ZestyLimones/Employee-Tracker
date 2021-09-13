@@ -29,8 +29,24 @@ app.get('/api/departments', (req, res) => {
       return;
     }
     res.json({
-      message: 'success!',
+      message: 'Here are the departments:',
       data: rows,
+    });
+  });
+});
+
+app.post('/api/add-department', ({ body }, res) => {
+  const sql = `INSERT INTO department (name) VALUE (?)`;
+  const params = [body.name];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'Successfully added department!',
+      data: body,
     });
   });
 });
@@ -44,8 +60,24 @@ app.get('/api/roles', (req, res) => {
       return;
     }
     res.json({
-      message: 'success!',
+      message: 'Here are the roles:',
       data: rows,
+    });
+  });
+});
+
+app.post('/api/add-role', ({ body }, res) => {
+  const sql = `INSERT INTO role (title, salary, department_id) VALUE (?)`;
+  const params = [body.title, body.salary, body.department_id];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'Successfully added role!',
+      data: body,
     });
   });
 });
@@ -59,8 +91,29 @@ app.get('/api/employees', (req, res) => {
       return;
     }
     res.json({
-      message: 'success!',
+      message: 'Here are the employees:',
       data: rows,
+    });
+  });
+});
+
+app.post('/api/add-employee', ({ body }, res) => {
+  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?)`;
+  const params = [
+    body.first_name,
+    body.last_name,
+    body.role_id,
+    body.manager_id,
+  ];
+
+  db.query(sql, params, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'Successfully added employee!',
+      data: body,
     });
   });
 });
