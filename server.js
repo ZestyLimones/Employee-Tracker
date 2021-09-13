@@ -1,4 +1,5 @@
 const express = require('express');
+const logo = require('asciiart-logo');
 const mysql = require('mysql2');
 const dotenv = require('dotenv').config();
 
@@ -14,9 +15,9 @@ const db = mysql.createConnection(
     host: 'localhost',
     user: 'root',
     password: process.env.myPassword,
-    database: employee_db,
+    database: 'employee_db',
   },
-  console.log('COnnected to employee_db database!')
+  console.log(`Connected to the employee_db database.`)
 );
 
 app.listen(PORT, () => {

@@ -30,7 +30,7 @@ INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES  ('John Johnson', 'Payroll Specialist', 1, 13),
         ('Steve Smith', 'Benefit Specialist', 2, 14),
         ('Betty Baker', 'HR Specialist', 3, 15),
-        ('Adam Anderson', 'Sales Rep', 4, 16) 
+        ('Adam Anderson', 'Sales Rep', 4, 16), 
         ('Candice Charlies', 'Client Specialist', 5, 17),
         ('Hank Hill', 'Customer Service Rep', 6, 18),
         ('Tracy Thompson', 'Senior Payroll Specialist', 7, 13),
