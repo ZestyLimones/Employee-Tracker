@@ -44,6 +44,7 @@ app.listen(PORT, () => {
       case 'View All Departments':
         axios.get('http://localhost:3001/api/departments').then((response) => {
           console.table(response.data.data);
+          mainPrompt();
         });
 
         break;
@@ -62,7 +63,8 @@ app.listen(PORT, () => {
             .then((response) => {
               //Need to change this
               console.table(response.data.data);
-            });
+            })
+            .then(mainPrompt());
         });
 
         break;
@@ -72,9 +74,36 @@ app.listen(PORT, () => {
         });
         break;
       case 'Add Role':
-        axios.post('http://localhost:3001/api/add_role').then((response) => {
-          //Need to change this
-          console.table(response.data.data);
+        prompt([
+          {
+            type: 'list',
+            message: 'Which department would you like to add the role to?',
+            name: 'listDepartments',
+            choices: [
+              //somehow pull in db options fo departments
+            ],
+          },
+          {
+            type: 'input',
+            message: 'What is the name of the role?',
+            name: 'newRole',
+          },
+          {
+            type: 'input',
+            message: 'What is salary for this role?',
+            name: 'newSalary',
+          },
+        ]).then((newResponse) => {
+          axios
+            .post('http://localhost:3001/api/add_role', {
+              title: newResponse.newRole, salary: newResponse.newSalary, department_id: newResponse
+              //response from the choice
+            })
+            .then((response) => {
+              //Need to change this
+              console.table(response.data.data);
+            })
+            .then(mainPrompt());
         });
         break;
       case 'View All Employees':
@@ -83,12 +112,17 @@ app.listen(PORT, () => {
         });
         break;
       case 'Add Employee':
-        axios
-          .post('http://localhost:3001/api/add_employee')
-          .then((response) => {
-            //Need to change this
-            console.table(response.data.data);
-          });
+        .then((newResponse) => {
+          axios
+            .post('http://localhost:3001/api/add_employee', {
+              name: newResponse.nameDepartment,
+            })
+            .then((response) => {
+              //Need to change this
+              console.table(response.data.data);
+            })
+            .then(mainPrompt());
+        });
         break;
       case 'Update Employee Role':
         axios
