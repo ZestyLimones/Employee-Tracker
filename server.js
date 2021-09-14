@@ -1,6 +1,7 @@
 const express = require('express');
 const logo = require('asciiart-logo');
 const mysql = require('mysql2');
+const inquirer = require('inquirer');
 const dotenv = require('dotenv').config();
 
 const PORT = process.env.PORT || 3001;
@@ -68,7 +69,7 @@ app.get('/api/roles', (req, res) => {
 
 app.post('/api/add-role', ({ body }, res) => {
   const sql = `INSERT INTO role (title, salary, department_id) VALUE (?)`;
-  const params = [body.title, body.salary, body.department_id];
+  const params = JSON.parse([body.title, body.salary, body.department_id]);
 
   db.query(sql, params, (err, result) => {
     if (err) {
@@ -121,3 +122,5 @@ app.post('/api/add-employee', ({ body }, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+//inquirer
