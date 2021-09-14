@@ -23,12 +23,20 @@ app.listen(PORT, () => {
         type: 'list',
         message: 'What would you like to do?',
         name: 'main',
-        choices: ['View all Departments', 'View Employees'],
+        choices: [
+          'View All Departments',
+          'Add Department',
+          'View All Roles',
+          'Add Role',
+          'View All Employees',
+          'Add Employee',
+          'Update Employee Role',
+        ],
       },
     ])
     .then((answer) => {
       switch (answer.main) {
-        case 'View all Departments':
+        case 'View All Departments':
           axios({
             method: 'GET',
             url: 'http://localhost:3001/api/departments',
@@ -36,13 +44,57 @@ app.listen(PORT, () => {
             console.table(response.data.data);
           });
           break;
-        case 'View Employees':
+        case 'Add Departments':
+          axios({
+            method: 'POST',
+            url: 'http://localhost:3001/api/add_departments',
+          }).then((response) => {
+            console.table(response.data.data);
+          });
+          break;
+        case 'View All Roles':
+          axios({
+            method: 'GET',
+            url: 'http://localhost:3001/api/roles',
+          }).then((response) => {
+            console.table(response.data.data);
+          });
+          break;
+        case 'Add Role':
+          axios({
+            method: 'POST',
+            url: 'http://localhost:3001/api/add_role',
+          }).then((response) => {
+            //Need to change this
+            console.table(response.data.data);
+          });
+          break;
+        case 'View All Employees':
           axios({
             method: 'GET',
             url: 'http://localhost:3001/api/employees',
           }).then((response) => {
             console.table(response.data.data);
           });
+          break;
+        case 'Add Employee':
+          axios({
+            method: 'POST',
+            url: 'http://localhost:3001/api/add_employee',
+          }).then((response) => {
+            //Need to change this
+            console.table(response.data.data);
+          });
+          break;
+        case 'Update Employee Role':
+          axios({
+            method: 'PUT',
+            url: 'http://localhost:3001/api/update_employee',
+          }).then((response) => {
+            //Need to change this
+            console.table(response.data.data);
+          });
+          break;
       }
     });
 });

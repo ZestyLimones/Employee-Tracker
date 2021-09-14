@@ -16,7 +16,7 @@ app.get('/api/departments', (req, res) => {
   });
 });
 
-app.post('/api/add-department', ({ body }, res) => {
+app.post('/api/add_department', ({ body }, res) => {
   const sql = `INSERT INTO department (name) VALUE (?)`;
   const params = [body.name];
 
@@ -47,9 +47,8 @@ app.get('/api/roles', (req, res) => {
   });
 });
 
-app.post('/api/addrole', ({ body }, res) => {
+app.post('/api/add_role', ({ body }, res) => {
   const sql = `INSERT INTO role SET ?`;
-  //   const params = ;
 
   db.query(sql, body, (err, result) => {
     if (err) {
@@ -65,6 +64,9 @@ app.post('/api/addrole', ({ body }, res) => {
 
 app.get('/api/employees', (req, res) => {
   const sql = `SELECT id, first_name AS "first name", last_name AS "last name", role_id AS "role id", manager_id AS "manager id" FROM employee`;
+  //need to do a join statement to do the role id for the role it's self
+  //join manager to email
+  //call
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -76,9 +78,10 @@ app.get('/api/employees', (req, res) => {
       data: rows,
     });
   });
+  9;
 });
 
-app.post('/api/add-employee', ({ body }, res) => {
+app.post('/api/add_employee', ({ body }, res) => {
   const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?)`;
   const params = [
     body.first_name,
