@@ -1,8 +1,9 @@
 const express = require('express');
 const logo = require('asciiart-logo');
-const mysql = require('mysql2');
+const axios = require('axios');
 const inquirer = require('inquirer');
 const dotenv = require('dotenv').config();
+const routes = require('./routes');
 
 const PORT = process.env.PORT || 3001;
 
@@ -11,116 +12,48 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-const db = mysql.createConnection(
-  {
-    host: 'localhost',
-    user: 'root',
-    password: process.env.myPassword,
-    database: 'employee_db',
-  },
-  console.log(`Connected to the employee_db database.`)
-);
-
-app.get('/api/departments', (req, res) => {
-  const sql = `SELECT id, name AS "department name" FROM department`;
-
-  db.query(sql, (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Here are the departments:',
-      data: rows,
-    });
-  });
-});
-
-app.post('/api/add-department', ({ body }, res) => {
-  const sql = `INSERT INTO department (name) VALUE (?)`;
-  const params = [body.name];
-
-  db.query(sql, params, (err, result) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Successfully added department!',
-      data: body,
-    });
-  });
-});
-
-app.get('/api/roles', (req, res) => {
-  const sql = `SELECT id, title, salary, department_id AS "department id" FROM role`;
-
-  db.query(sql, (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Here are the roles:',
-      data: rows,
-    });
-  });
-});
-
-app.post('/api/add-role', ({ body }, res) => {
-  const sql = `INSERT INTO role (title, salary, department_id) VALUE (?)`;
-  const params = JSON.parse([body.title, body.salary, body.department_id]);
-
-  db.query(sql, params, (err, result) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Successfully added role!',
-      data: body,
-    });
-  });
-});
-
-app.get('/api/employees', (req, res) => {
-  const sql = `SELECT id, first_name AS "first name", last_name AS "last name", role_id AS "role id", manager_id AS "manager id" FROM employee`;
-
-  db.query(sql, (err, rows) => {
-    if (err) {
-      res.status(500).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Here are the employees:',
-      data: rows,
-    });
-  });
-});
-
-app.post('/api/add-employee', ({ body }, res) => {
-  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?)`;
-  const params = [
-    body.first_name,
-    body.last_name,
-    body.role_id,
-    body.manager_id,
-  ];
-
-  db.query(sql, params, (err, result) => {
-    if (err) {
-      res.status(400).json({ error: err.message });
-      return;
-    }
-    res.json({
-      message: 'Successfully added employee!',
-      data: body,
-    });
-  });
-});
+app.use(routes);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+
+  inquirer
+    .prompt([
+      {
+        type: 'list',
+        message: 'What would you like to do?',
+        name: 'main',
+        choices: ['View all Departments', 'View Employees'],
+      },
+    ])
+    .then((answer) => {
+      switch (answer.main) {
+        case 'View all Departments':
+          axios({
+            method: 'GET',
+            url: 'http://localhost:3001/api/departments',
+          }).then((response) => {
+            console.table(response.data.data);
+          });
+          break;
+        case 'View Employees':
+          axios({
+            method: 'GET',
+            url: 'http://localhost:3001/api/employees',
+          }).then((response) => {
+            console.table(response.data.data);
+          });
+      }
+    });
 });
 
 //inquirer
+// What would you like to do?
+// - View Employees
+// - Add Employees
+// - - "who is the employee's manager?"
+// - Update Employee Role
+// - View All Roles
+// - Add Role
+// - View All Departments
+// - Add Department
