@@ -33,7 +33,7 @@ app.post('/api/add_department', ({ body }, res) => {
 });
 
 app.get('/api/roles', (req, res) => {
-  const sql = `SELECT id, title, salary, department_id AS "department id" FROM role`;
+  const sql = `SELECT role.id, role.title, role.salary, role.department_id FROM role LEFT JOIN department ON role.department_id = department.id;`;
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -63,10 +63,7 @@ app.post('/api/add_role', ({ body }, res) => {
 });
 
 app.get('/api/employees', (req, res) => {
-  const sql = `SELECT id, first_name AS "first name", last_name AS "last name", role_id AS "role id", manager_id AS "manager id" FROM employee`;
-  //need to do a join statement to do the role id for the role it's self
-  //join manager to email
-  //call
+  const sql = `SELECT employee.id, employee.first_name AS "first name", employee.last_name AS "last name", employee.role_title AS "role title", employee.role_id AS "role id", employee.manager_id AS "manager id" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
@@ -78,7 +75,6 @@ app.get('/api/employees', (req, res) => {
       data: rows,
     });
   });
-  9;
 });
 
 app.post('/api/add_employee', ({ body }, res) => {
