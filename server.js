@@ -5,6 +5,7 @@ const inquirer = require('inquirer');
 const dotenv = require('dotenv').config();
 const routes = require('./routes');
 const { prompt } = require('inquirer');
+const { response } = require('express');
 
 const PORT = process.env.PORT || 3001;
 
@@ -86,10 +87,10 @@ app.listen(PORT, () => {
           });
           break;
         case 'Add Role':
+          let departments = [];
           axios
             .get('http://localhost:3001/api/departments')
             .then((response) => {
-              let departments = [];
               response.data.data.forEach((element) => {
                 departments.push(element.id);
                 // departments.push(element['department name']);
@@ -97,82 +98,40 @@ app.listen(PORT, () => {
               // console.log('inside axios', departments);
               // console.log(departments);
               // return departments;
-              prompt([
-                {
-                  type: 'list',
-                  message:
-                    'Which department would you like to add the role to?',
-                  name: 'listDepartments',
-                  choices: departments,
-                  // 'Payroll',
-                  // 'Benefits',
-                  // 'Human Resources',
-                  // 'Business Development',
-                  // 'Client Development',
-                  // 'Customer Service',
-                },
-                {
-                  type: 'input',
-                  message: 'What is the name of the role?',
-                  name: 'newRole',
-                },
-                {
-                  type: 'input',
-                  message: 'What is salary for this role?',
-                  name: 'newSalary',
-                },
-              ]).then((newResponse) => {
-                axios
-                  .post('http://localhost:3001/api/add_role', {
-                    title: newResponse.newRole,
-                    salary: newResponse.newSalary,
-                    department_id: newResponse.listDepartments,
-                  })
-                  // .then((response) => {
-                  //   //Need to change this
-                  //   console.table(response.data.data);
-                  // })
-                  .then(mainPrompt());
-              });
             });
-          // prompt([
-          //   {
-          //     type: 'list',
-          //     message: 'Which department would you like to add the role to?',
-          //     name: 'listDepartments',
-          //     choices: [
-          //           'Payroll',
-          //           'Benefits',
-          //           'Human Resources',
-          //           'Business Development',
-          //           'Client Development',
-          //           'Customer Service',
-          //         ],
-          //   },
-          //   {
-          //     type: 'input',
-          //     message: 'What is the name of the role?',
-          //     name: 'newRole',
-          //   },
-          //   {
-          //     type: 'input',
-          //     message: 'What is salary for this role?',
-          //     name: 'newSalary',
-          //   },
-          // ]).then((newResponse) => {
-          //   axios
-          //     .post('http://localhost:3001/api/add_role', {
-          //       title: newResponse.newRole,
-          //       salary: newResponse.newSalary,
-          //       department_id: newResponse,
-          //       //response from the choice
-          //     })
-          //     .then((response) => {
-          //       //Need to change this
-          //       console.table(response.data.data);
-          //     })
-          //     .then(mainPrompt());
-          // });
+          prompt([
+            {
+              type: 'input',
+              message: 'What is the name of the role?',
+              name: 'newRole',
+            },
+            {
+              type: 'input',
+              message: 'What is salary for this role?',
+              name: 'newSalary',
+            },
+            {
+              type: 'list',
+              message:
+                'Which department would you like to assign to this role?',
+              name: 'listDepartments',
+              choices: departments,
+              // 'Payroll',
+              // 'Benefits',
+              // 'Human Resources',
+              // 'Business Development',
+              // 'Client Development',
+              // 'Customer Service',
+            },
+          ]).then((newResponse) => {
+            axios
+              .post('http://localhost:3001/api/add_role', {
+                title: newResponse.newRole,
+                salary: newResponse.newSalary,
+                department_id: newResponse.listDepartments,
+              })
+              .then(mainPrompt());
+          });
           break;
         case 'View All Employees':
           axios.get('http://localhost:3001/api/employees').then((response) => {
@@ -180,29 +139,53 @@ app.listen(PORT, () => {
             mainPrompt();
           });
           break;
-          // case 'Add Employee':
-          //   prompt([
-          //     {
-          //       type: 'list',
-          //       message: 'Which department would you like to add the role to?',
-          //       name: 'listDepartments',
-          //       choices: [
-          //         //somehow pull in db options fo departments
-          //         // axios.get('http://localhost:3001/api/departments').then((response) => {
-          //         //   console.table(response.data.data);
-          //       ],
-          //     },
-          //   ]).then((newResponse) => {
-          //     axios
-          //       .post('http://localhost:3001/api/add_employee', {
-          //         name: newResponse.nameDepartment,
-          //       })
-          //       .then((response) => {
-          //         //Need to change this
-          //         console.table(response.data.data);
-          //       })
-          //       .then(mainPrompt());
-          //   });
+        case 'Add Employee':
+          let roles = [];
+          let managers = [];
+          axios.get('http://localhost:3001/api/roles').then((response) => {
+            response.data.data.forEach((element) => {
+              roles.push(element.id);
+            });
+          });
+          axios.get('http://localhost:3001/api/employees').then((response) => {
+            response.data.data.forEach((element) => {
+              if (element['manager id'] == null) {
+                managers.push(element.id);
+              }
+            });
+          });
+          prompt([
+            {
+              type: 'input',
+              message: "What is the employee's first name?",
+              name: 'newFirstName',
+            },
+            {
+              type: 'input',
+              message: "What is the employee's last name?",
+              name: 'newLastName',
+            },
+            {
+              type: 'list',
+              message: 'Which role would you like to assign to this employee?',
+              name: 'listRoles',
+              choices: roles,
+            },
+            {
+              type: 'list',
+              message: "Who is the employee's manager?",
+              name: 'listManager',
+              choices: managers,
+            },
+          ]).then((newResponse) => {
+            axios
+              .post('http://localhost:3001/api/add_role', {
+                title: newResponse.newRole,
+                salary: newResponse.newSalary,
+                department_id: newResponse.listDepartments,
+              })
+              .then(mainPrompt());
+          });
           break;
         case 'Update Employee Role':
           axios

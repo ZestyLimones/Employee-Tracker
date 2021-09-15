@@ -78,15 +78,9 @@ app.get('/api/employees', (req, res) => {
 });
 
 app.post('/api/add_employee', ({ body }, res) => {
-  const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?)`;
-  const params = [
-    body.first_name,
-    body.last_name,
-    body.role_id,
-    body.manager_id,
-  ];
+  const sql = `INSERT INTO role SET ?`;
 
-  db.query(sql, params, (err, result) => {
+  db.query(sql, body, (err, result) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
