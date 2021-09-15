@@ -63,7 +63,7 @@ app.post('/api/add_role', ({ body }, res) => {
 });
 
 app.get('/api/employees', (req, res) => {
-  const sql = `SELECT employee.id, employee.first_name AS "first name", employee.last_name AS "last name", employee.role_title AS "role title", employee.role_id AS "role id", employee.manager_id AS "manager id" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id`;
+  const sql = `SELECT employee.id, employee.first_name AS "first name", employee.last_name AS "last name", employee.role_id AS "role id", employee.manager_id AS "manager id" FROM employee LEFT JOIN role ON employee.role_id = role.id LEFT JOIN employee manager on manager.id = employee.manager_id`;
 
   db.query(sql, (err, rows) => {
     if (err) {
