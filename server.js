@@ -185,7 +185,8 @@ app.listen(PORT, () => {
               .post('http://localhost:3001/api/add_role', {
                 title: newResponse.newRole,
                 salary: newResponse.newSalary,
-                department_id: newResponse.listDepartments,
+                department_id: newResponse.listRoles,
+                manager_id: newResponse.listManagers,
               })
               .then(mainPrompt());
           });
