@@ -78,7 +78,7 @@ app.get('/api/employees', (req, res) => {
 });
 
 app.post('/api/add_employee', ({ body }, res) => {
-  const sql = `INSERT INTO role SET ?`;
+  const sql = `INSERT INTO employee SET ?`;
 
   db.query(sql, body, (err, result) => {
     if (err) {

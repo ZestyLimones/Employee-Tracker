@@ -176,16 +176,16 @@ app.listen(PORT, () => {
             {
               type: 'list',
               message: "Who is the employee's manager?",
-              name: 'listManager',
+              name: 'listManagers',
               choices: managers,
             },
           ]).then((newResponse) => {
             //this part still needs review and work
             axios
-              .post('http://localhost:3001/api/add_role', {
-                title: newResponse.newRole,
-                salary: newResponse.newSalary,
-                department_id: newResponse.listRoles,
+              .post('http://localhost:3001/api/add_employee', {
+                first_name: newResponse.newFirstName,
+                last_name: newResponse.newLastName,
+                role_id: newResponse.listRoles,
                 manager_id: newResponse.listManagers,
               })
               .then(mainPrompt());
