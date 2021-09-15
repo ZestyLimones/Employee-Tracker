@@ -87,6 +87,7 @@ app.listen(PORT, () => {
           });
           break;
         case 'Add Role':
+          //need to figure out a way to associate departments varialbe with both id and name
           let departments = [];
           axios
             .get('http://localhost:3001/api/departments')
@@ -140,6 +141,7 @@ app.listen(PORT, () => {
           });
           break;
         case 'Add Employee':
+          //need to figure out a way to associate roles and managers varialbes with both id and names
           let roles = [];
           let managers = [];
           axios.get('http://localhost:3001/api/roles').then((response) => {
@@ -178,6 +180,7 @@ app.listen(PORT, () => {
               choices: managers,
             },
           ]).then((newResponse) => {
+            //this part still needs review and work
             axios
               .post('http://localhost:3001/api/add_role', {
                 title: newResponse.newRole,
