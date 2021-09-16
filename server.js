@@ -193,6 +193,7 @@ app.listen(PORT, () => {
         case 'Update Employee Role':
           let allEmpoyees = [];
           let allRoles = [];
+
           axios.get('http://localhost:3001/api/employees').then((response) => {
             response.data.data.forEach((element) => {
               allEmpoyees.push(element.id);
@@ -206,7 +207,7 @@ app.listen(PORT, () => {
           prompt([
             {
               type: 'input',
-              message: 'filler',
+              messages: 'filler',
               name: 'filler',
             },
             {
