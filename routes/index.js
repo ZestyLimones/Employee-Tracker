@@ -92,4 +92,19 @@ app.post('/api/add_employee', ({ body }, res) => {
   });
 });
 
+app.put('/api/update_employee', ({ body }, res) => {
+  const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+
+  db.query(sql, body, (err, result) => {
+    if (err) {
+      res.status(400).json({ error: err.message });
+      return;
+    }
+    res.json({
+      message: 'Successfully updated employee!',
+      data: body,
+    });
+  });
+});
+
 module.exports = app;

@@ -180,7 +180,6 @@ app.listen(PORT, () => {
               choices: managers,
             },
           ]).then((newResponse) => {
-            //this part still needs review and work
             axios
               .post('http://localhost:3001/api/add_employee', {
                 first_name: newResponse.newFirstName,
@@ -192,6 +191,32 @@ app.listen(PORT, () => {
           });
           break;
         case 'Update Employee Role':
+          let allEmpoyees = [];
+          let allRoles = [];
+          axios.get('http://localhost:3001/api/employees').then((response) => {
+            response.data.data.forEach((element) => {
+              allEmpoyees.push(element.id);
+            });
+          });
+          axios.get('http://localhost:3001/api/roles').then((response) => {
+            response.data.data.forEach((element) => {
+              allRoles.push(element.id);
+            });
+          });
+          prompt([
+            {
+              type: 'list',
+              message: 'Which employee would you like to update?',
+              name: 'listAllEmployees',
+              choices: allEmpoyees,
+            },
+            {
+              type: 'list',
+              message: 'Which role would you like to assign to this employee?',
+              name: 'listAllEmployees',
+              choices: allEmpoyees,
+            },
+          ]);
           axios
             .put('http://localhost:3001/api/update_employee')
             .then((response) => {
