@@ -93,9 +93,12 @@ app.post('/api/add_employee', ({ body }, res) => {
 });
 
 app.put('/api/update_employee', ({ body }, res) => {
-  const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
+  const parm1 = body.role_id;
+  const parm2 = body.id;
 
-  db.query(sql, body, (err, result) => {
+  const sql = `UPDATE employee SET role_id = ${parm1} WHERE id = ${parm2}`;
+
+  db.query(sql, (err, result) => {
     if (err) {
       res.status(400).json({ error: err.message });
       return;
