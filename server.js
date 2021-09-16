@@ -203,33 +203,30 @@ app.listen(PORT, () => {
             response.data.data.forEach((element) => {
               allRoles.push(element.id);
             });
+            prompt([
+              {
+                type: 'list',
+                message: 'Which employee would you like to update?',
+                name: 'listAllEmployees',
+                choices: allEmpoyees,
+              },
+              {
+                type: 'list',
+                message:
+                  'Which role would you like to assign to this employee?',
+                name: 'listAllRoles',
+                choices: allEmpoyees,
+              },
+            ]).then((newResponse) => {
+              axios
+                .put('http://localhost:3001/api/update_employee', {
+                  role_id: newResponse.listAllRoles,
+                  id: newResponse.listAllEmployees,
+                })
+                .then(mainPrompt());
+            });
           });
-          prompt([
-            {
-              type: 'input',
-              messages: 'filler',
-              name: 'filler',
-            },
-            {
-              type: 'list',
-              message: 'Which employee would you like to update?',
-              name: 'listAllEmployees',
-              choices: allEmpoyees,
-            },
-            {
-              type: 'list',
-              message: 'Which role would you like to assign to this employee?',
-              name: 'listAllRoles',
-              choices: allEmpoyees,
-            },
-          ]).then((newResponse) => {
-            axios
-              .put('http://localhost:3001/api/update_employee', {
-                role_id: newResponse.listAllRoles,
-                id: newResponse.listAllEmployees,
-              })
-              .then(mainPrompt());
-          });
+
           break;
       }
     });
