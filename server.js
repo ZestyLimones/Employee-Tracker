@@ -44,22 +44,6 @@ app.listen(PORT, () => {
             .get('http://localhost:3001/api/departments')
             .then((response) => {
               console.table(response.data.data);
-              // console.log(response.data);
-              // console.log(response.data.data);
-              // console.log(response.data.data[0]);
-              // console.log(response.data.data[0]['department name']);
-              // console.log(response.data.data[0]['id']);
-
-              // console.log(
-              //   response.data.data.forEach((element) => {
-              //     console.log(element['department name']);
-              //   })
-              // );
-              // let newArray = [];
-              // response.data.data.forEach((element) => {
-              //   newArray.push(element['department name']);
-              // });
-              // console.log(newArray);
               mainPrompt();
             });
 
@@ -87,18 +71,13 @@ app.listen(PORT, () => {
           });
           break;
         case 'Add Role':
-          //need to figure out a way to associate departments varialbe with both id and name
           let departments = [];
           axios
             .get('http://localhost:3001/api/departments')
             .then((response) => {
               response.data.data.forEach((element) => {
                 departments.push(element.id);
-                // departments.push(element['department name']);
               });
-              // console.log('inside axios', departments);
-              // console.log(departments);
-              // return departments;
             });
           prompt([
             {
@@ -117,12 +96,6 @@ app.listen(PORT, () => {
                 'Which department would you like to assign to this role?',
               name: 'listDepartments',
               choices: departments,
-              // 'Payroll',
-              // 'Benefits',
-              // 'Human Resources',
-              // 'Business Development',
-              // 'Client Development',
-              // 'Customer Service',
             },
           ]).then((newResponse) => {
             axios
@@ -141,7 +114,6 @@ app.listen(PORT, () => {
           });
           break;
         case 'Add Employee':
-          //need to figure out a way to associate roles and managers varialbes with both id and names
           let roles = [];
           let managers = [];
           axios.get('http://localhost:3001/api/roles').then((response) => {
