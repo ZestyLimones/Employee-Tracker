@@ -31,7 +31,11 @@ This application allows a business owner to view and manage the departments, rol
    ```
    <p align="right">(<a href="#top">back to top</a>)</p>
 
-## Video Demonstraction
+## Visual Example
+
+![screenhot of terminal with screen options](./assets/employee-tracker-screenshot.jpg)
+
+### Video Demonstraction
 
 Here is a link to the visual demonstration showing the user viewing the departments, roles, and employees, adding a role and employee, and updating an employee's role.
 
