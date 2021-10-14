@@ -4,6 +4,8 @@
 
 This application allows a business owner to view and manage the departments, roles, and employees within their company so they can organize and plan their business. Business owner is able to view and add departments, roles, and employees.
 
+## Table of Contents
+
 - [Getting Started](#getting-started)
 - [Visual Example](#visual-example)
 - [Future Development](#future-development)
